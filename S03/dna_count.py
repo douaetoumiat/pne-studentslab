@@ -6,7 +6,7 @@ def letters(letter,seq):
             count += 1
     return count
 
-sec = "CATGTAGACTAG"
+sec = input("introduce a sequence")
 print("The lenght of the sequence is:", len(sec))
 print("A:",letters("A",sec))
 print("C:",letters("C",sec))
