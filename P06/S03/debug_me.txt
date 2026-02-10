@@ -1,3 +1,4 @@
 The codes fails because in  line 11 and third  of the main code the t1 equals 0 ,
 therefore since in the function t0 is divided by t1 and this is one ,the code has a bug there .
-This will happen any time c and d are the same.
+This will happen any time c and d are the same.Since the first result gets printed there is no problem in the function
+themselves.Thats why the first ,third and fourth ñines of the main code are perfectly computed.
