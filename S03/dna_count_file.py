@@ -4,7 +4,7 @@ def count_bases(seq1):
     count_bases1 = 0
     bases =[]
     for i in range(0,len(seq1)):
-        num = len(seq1[i])
+        num = len(seq1[i].strip())
         count_total += num
         seq1[i] = seq1[i].strip()
         for l in range(0,len(seq1[i])):
