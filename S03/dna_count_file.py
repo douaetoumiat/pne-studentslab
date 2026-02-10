@@ -1,4 +1,4 @@
-
+from dna_count import  letters
 def count_bases(seq1):
     count_total = 0
     count_bases1 = 0
@@ -21,6 +21,10 @@ file.close()
 answer = count_bases(seq)
 print("the total bases are:",answer[0])
 print("the different bases are:",answer[1])
+print("A:",letters("A",seq))
+print("C:",letters("C",seq))
+print("G:",letters("G",seq))
+print("T:",letters("T",seq))
 
 
 
