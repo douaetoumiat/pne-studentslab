@@ -10,9 +10,12 @@ def count_bases(seq):
             if seq[i][l] not in bases :
                 count_bases += 1
                 bases.append(seq[i][l])
+    return count_total ,count_bases
 
 
 
 file  = open("/home/alumnos/douae/PycharmProjects/pne-studentslab/S03/dna.txt")
 seq = file.readlines()
-print(count_bases(seq))
+answer = count_bases(seq)
+print("the total bases are:",answer[0])
+print("the different bases are:",answer[1])
