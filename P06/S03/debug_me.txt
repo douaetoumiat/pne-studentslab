@@ -1,3 +1,3 @@
-The codes fails because in the third line of the main code the t1 equals 0 ,
+The codes fails because in  line 11 and third  of the main code the t1 equals 0 ,
 therefore since in the function t0 is divided by t1 and this is one ,the code has a bug there .
 This will happen any time c and d are the same.
