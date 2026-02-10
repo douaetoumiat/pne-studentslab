@@ -17,6 +17,7 @@ def count_bases(seq1):
 
 file  = open("/home/alumnos/douae/PycharmProjects/pne-studentslab/S03/dna.txt")
 seq = file.readlines()
+file.close()
 answer = count_bases(seq)
 print("the total bases are:",answer[0])
 print("the different bases are:",answer[1])
