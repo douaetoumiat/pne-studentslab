@@ -4,6 +4,7 @@ FILENAME = "/home/alumnos/douae/PycharmProjects/pne-studentslab/S04/text files/H
 
 file_contents = Path(FILENAME).read_text()
 line= file_contents.split("\n")
+
 def header(seq):
     sequences = []
     delimeter_space = " "
