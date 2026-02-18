@@ -34,9 +34,25 @@ def seq_count(seq):
          if n == m :
            count += 1
       h[m] = count
-    for key, value in h.items():
-        print(key, value)
+    return h
+def seq_reverse(seq):
+   return seq[::-1]
 
+def seq_complement(seq):
+    new_seq = []
+    delimeter_space = ""
+    for i in range (0,len(seq)):
+        if seq[i] == "A":
+            new_seq.append("T")
+        if seq[i] == "T":
+            new_seq.append("A")
+        if seq[i] == "C":
+            new_seq.append("G")
+        if seq[i] == "G":
+            new_seq.append("C")
+
+    final_seq = delimeter_space.join(new_seq)
+    return final_seq
 
 print(seq_count_base(seq_read_fasta("/home/alumnos/douae/PycharmProjects/pne-studentslab/S04/text files/Homo_sapiens_ADA_sequence.txt"),"A"))
-print(seq_count(seq_read_fasta("/home/alumnos/douae/PycharmProjects/pne-studentslab/S04/text files/Homo_sapiens_ADA_sequence.txt")))
+print(seq_complement(seq_read_fasta("/home/alumnos/douae/PycharmProjects/pne-studentslab/S04/text files/Homo_sapiens_ADA_sequence.txt")))
