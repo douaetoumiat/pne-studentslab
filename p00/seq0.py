@@ -54,5 +54,3 @@ def seq_complement(seq):
     final_seq = delimeter_space.join(new_seq)
     return final_seq
 
-print(seq_count_base(seq_read_fasta("/home/alumnos/douae/PycharmProjects/pne-studentslab/S04/text files/Homo_sapiens_ADA_sequence.txt"),"A"))
-print(seq_complement(seq_read_fasta("/home/alumnos/douae/PycharmProjects/pne-studentslab/S04/text files/Homo_sapiens_ADA_sequence.txt")))
