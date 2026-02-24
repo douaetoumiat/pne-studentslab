@@ -11,7 +11,7 @@ class Seq:
        if valid:
             print("New sequence created!")
        else:
-           print("INCORRECT Sequence detected")
+           print("ERROR")
 
     def __str__(self):
         """Method called when the object is being printed"""
