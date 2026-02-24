@@ -19,7 +19,7 @@ def generate_seqs(pattern,number):
     list_s  = []
     count = 0
     bases = pattern
-    while count < number :
+    while count <= number :
         list_s.append(bases)
         count += 1
         bases = "".join(list_s)
