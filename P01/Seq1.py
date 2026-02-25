@@ -18,11 +18,22 @@ class Seq:
             elif not valid:
                 print("-- Creating a INVALID sequence")
 
+
     def __str__(self):
-        if self.strbases is not None:
-            return self.strbases
+        bases = "ATCG"
+        valid = True
+        if self.strbases is None:
+            return"Null"
         else:
-            return "Null"
+            for i in range(0, len(self.strbases)):
+                if self.strbases[i] not in bases:
+                    valid = False
+
+            if valid:
+               return  self.strbases
+            elif not valid:
+                return "Error"
+
 
     def len(self):
         if self.strbases is not None:
