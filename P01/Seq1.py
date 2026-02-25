@@ -1,19 +1,34 @@
 from pathlib import Path
 class Seq:
 
-    def __init__(self, strbases):
-
+    def __init__(self, strbases=None):
+        bases = "ATCG"
         self.strbases = strbases
-        print("New sequence created!")
+        valid = True
+        if self.strbases is None:
+            print("-- Creating a Null sequence")
+        else :
+            for i in range(0,len(self.strbases)):
+                if self.strbases[i] not in bases :
+                     valid = False
+
+
+            if valid :
+                print("New sequence created!")
+            elif not valid:
+                print("-- Creating a INVALID sequence")
 
     def __str__(self):
-
-
-        return self.strbases
+        if self.strbases is not None:
+            return self.strbases
+        else:
+            return "Null"
 
     def len(self):
-
-        return len(self.strbases)
+        if self.strbases is not None:
+            return len(self.strbases)
+        else :
+            return 0
 
     def count_base(self,base):
         count = 0
