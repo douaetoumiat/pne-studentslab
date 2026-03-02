@@ -62,6 +62,15 @@ class Seq:
         else:
             return h
 
+    def count_base_number(self,base ):
+        count = 0
+        if self.strbases is not None and len(self.strbases) != 0:
+            for i in range(0, len(self.strbases)):
+                if self.strbases[i] == base:
+                    count += 1
+            return count
+        else:
+            return count
 
     def count(self):
         s = "ACGT"
