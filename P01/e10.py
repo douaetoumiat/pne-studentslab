@@ -19,7 +19,7 @@ def print_gene():
         most_used_count = result[genes[i]][most_used_base]
 
 
-        print(f"Most used base in {genes[i]}: {most_used_base} with count {most_used_count}")
+        print(f"Most used base in {genes[i]}: {most_used_base} ")
 
 
 
