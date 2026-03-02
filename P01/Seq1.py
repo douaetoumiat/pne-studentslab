@@ -134,11 +134,15 @@ class Seq:
     def read_fasta(self,filename):
         file_contents = Path(filename).read_text()
         line = file_contents.split("\n")
-        delimeter_space = " "
+        delimeter_space = ""
         sequences = []
         for i in range(0, len(line)):
+
             if not (line[i]).startswith(">"):
+                line[i] = line[i].strip()
                 sequences.append(line[i])
-        sequence = delimeter_space.join(sequences)
-        return sequence
+        self.strbases  = (delimeter_space.join(sequences))
+
+        return self.strbases
+
 

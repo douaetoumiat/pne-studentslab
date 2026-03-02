@@ -1,5 +1,5 @@
 from Seq1 import Seq
 print("-----| Practice 1, Exercise 9 |------")
-s = seq()
-s.read_fasta()
-print("sequence 1;", s1,"\n", s1.count(),"\n","REV:",s1.reverse(),"\n","COMP:",s1.complement())
+s = Seq()
+s.read_fasta("/home/alumnos/douae/PycharmProjects/pne-studentslab/S04/text files/Danio_rerio_U5_sequence.txt")
+print("sequence 1;", s,"\n", s.count(),"\n","REV:",s.reverse(),"\n","COMP:",s.complement())
