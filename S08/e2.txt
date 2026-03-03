@@ -1,0 +1,9 @@
+Destination IP,Name (if known),Times
+212.128.255.67,self,0.078 ms,0.054 ms,0.060 ms,0.057 ms
+8.8.8.8,Google,2.61 ms,2.60 ms,2.95 ms
+10.8.57.182,mobile,
+212.128.240.50,http://www.urjc.es/,1.74 ms,1.48 ms,1.98 ms
+140.82.121.3,github.com,35,7 ms,35.0 ms,35.1ms
+185.15.58.224,wikipedia.org,16.4ms,17.9ms,16.5ms
+172.67.160.238,newdomain.com.au,3,15ms,3,32ms,3,19ms
+
