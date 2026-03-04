@@ -2,12 +2,17 @@ import socket
 
 # Configure the Server's IP and PORT
 PORT = 8081
-IP = "192.168.124.179" # it depends on the machine the server is running
-
+IP = "212.128.255.64" # it depends on the machine the server is running
+flag = True
 while True:
        message = input("Write a message")
-        clientsocket.send(send_bytes)
-        clientsocket.close()
+       if message != "STOP":
+           s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+           s.connect(IP,PORT)
+           s.send(str,encode(message))
+           s.close()
+       else:
+            flag =False
 
 
 while True:
