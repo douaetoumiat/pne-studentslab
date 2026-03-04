@@ -22,6 +22,7 @@ while number < 6:
 
     bases = FRAT1[start:cut]
     print(f"Fragment{number}:{bases}")
+    response = c.talk(bases)
     number += 1
     cut += 5
     start += 5
