@@ -17,12 +17,12 @@ FRAT1 = seq_read_fasta("/home/alumnos/douae/PycharmProjects/pne-studentslab/S04/
 print(FRAT1)
 number = 1
 start = 0
-cut = 5
+cut = 10
 while number < 6:
 
     bases = FRAT1[start:cut]
     print(f"Fragment{number}:{bases}")
     response = c.talk(bases)
     number += 1
-    cut += 5
-    start += 5
+    cut += 10
+    start += 10
