@@ -9,7 +9,7 @@ while True:
        if message != "STOP":
            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
            s.connect(IP,PORT)
-           s.send(str,encode(message))
+           s.send(str.encode(message))
            s.close()
        else:
             flag =False
