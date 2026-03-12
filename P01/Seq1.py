@@ -50,6 +50,9 @@ class Seq:
             elif not valid:
                 return 0
 
+    def ping(self):
+        print("Ok!\n")
+
 
     def count_base(self,base):
         count = 0
