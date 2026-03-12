@@ -68,6 +68,14 @@ while True:
                     cs.send(response.encode())
 
                     cs.close()
+        elif msg[0:4] == "INFO":
+            termcolor.cprint(f" {msg[0:4]}", 'green')
+            sequence = msg[4:].upper().strip()
+            seq = Seq(sequence)
+            bases = seq.count()
+            response1 = f"sequence:{ sequence} \n Total lentgh:{seq.len()} \n  "
+            response2 =
+
 
 
         else:
