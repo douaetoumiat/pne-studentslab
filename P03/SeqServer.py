@@ -21,7 +21,7 @@ ls.bind((IP, PORT))
 
 ls.listen()
 
-print("The server is configured!")
+print("The seq server is configured!")
 
 while True:
     # -- Waits for a client to connect
@@ -46,16 +46,30 @@ while True:
         print("A client has connected to the server!")
         msg_raw = cs.recv(2048)
         msg = msg_raw.decode()
+        msg = str(msg.upper().strip())
 
-
-        if msg != "PING":
+        if msg == "PING":
             print("PING COMMAND!")
-            s = Seq(msg)
-            s.ping()
+            s = Seq()
             response = s.ping()
+            print(response)
             cs.send(response.encode())
 
             cs.close()
+        elif  msg[0:3] == "GET":
+            termcolor.cprint(f" {msg[0:3]}", 'green')
+            sequences = ["ACGCTA","CCGATGC","AACGTAC","GGCATTC"]
+            for i in range(len(sequences)):
+                number = i
+                number_str = str(number)
+                if msg[-1] == number_str :
+                    print(sequences[i])
+                    response = str(sequences[i]) + "\n"
+                    cs.send(response.encode())
+
+                    cs.close()
+
+
         else:
             termcolor.cprint(f"Message received: {msg}", 'green')
             response = "ECHO:" + msg

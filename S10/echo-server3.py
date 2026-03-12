@@ -57,6 +57,7 @@ while True:
         # -- into a human-redeable string
         msg = msg_raw.decode()
 
+
         # -- Print the received message
         termcolor.cprint(f"Message received: {msg}", 'green')
         print("Connection:",connection,"Client(IP,PORT):",client_ip_port)

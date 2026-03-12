@@ -51,7 +51,7 @@ class Seq:
                 return 0
 
     def ping(self):
-        print("Ok!\n")
+        return("Ok!\n")
 
 
     def count_base(self,base):
