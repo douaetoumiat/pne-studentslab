@@ -81,10 +81,20 @@ while True:
 
             response1 = f"sequence:{ sequence} \nTotal lentgh:{seq.len()} \n"
             response2 = bases
+            print(response1 +response2)
             cs.send(response1.encode())
             cs.send(response2.encode())
             cs.close()
+        elif msg[0:4] == "COMP":
 
+            termcolor.cprint(f" {msg[0:4]}", 'green')
+            sequence = msg[4:].upper().strip()
+            seq = Seq(sequence)
+            complement = seq.complement()
+            response1 = f"Complement:{complement} \n"
+            print(response1)
+            cs.send(response1.encode())
+            cs.close()
 
         else:
             termcolor.cprint(f"Message received: {msg}", 'green')
