@@ -79,11 +79,9 @@ while True:
             for key ,value in bases_dict.items():
                 bases = bases + str(key) + ":" + str(value) + " (" + str((seq.count_base_number(key)*100)/seq.len()) + "%)\n"
 
-            response1 = f"sequence:{ sequence} \nTotal lentgh:{seq.len()} \n"
-            response2 = bases
-            print(response1 +response2)
+            response1 = f"sequence:{ sequence} \nTotal lentgh:{seq.len()} \n {bases}"
+            print(response1 )
             cs.send(response1.encode())
-            cs.send(response2.encode())
             cs.close()
         elif msg[0:4] == "COMP":
 
