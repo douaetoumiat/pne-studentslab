@@ -69,13 +69,21 @@ while True:
 
                     cs.close()
         elif msg[0:4] == "INFO":
+
             termcolor.cprint(f" {msg[0:4]}", 'green')
             sequence = msg[4:].upper().strip()
             seq = Seq(sequence)
-            bases = seq.count()
-            response1 = f"sequence:{ sequence} \n Total lentgh:{seq.len()} \n  "
-            response2 =
+            bases_dict = seq.count()
+            bases = ""
 
+            for key ,value in bases_dict.items():
+                bases = bases + str(key) + ":" + str(value) + " (" + str((seq.count_base_number(key)*100)/seq.len()) + "%)\n"
+
+            response1 = f"sequence:{ sequence} \nTotal lentgh:{seq.len()} \n"
+            response2 = bases
+            cs.send(response1.encode())
+            cs.send(response2.encode())
+            cs.close()
 
 
         else:
