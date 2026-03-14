@@ -22,7 +22,7 @@ def find_exons(exon,code):
 
 
 
-FILENAME = "/home/alumnos/douae/PycharmProjects/pne-studentslab/S04/text files/Homo_sapiens_ADA_sequence.txt"
+FILENAME = "/S04/text files/ADA.txt"
 FILENAME2 = "/home/alumnos/douae/PycharmProjects/pne-studentslab/S04/text files/ADA_EXONS.txt"
 file_contents = Path(FILENAME).read_text()
 exon_content = Path(FILENAME2).read_text()

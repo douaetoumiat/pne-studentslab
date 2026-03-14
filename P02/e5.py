@@ -13,7 +13,7 @@ PORT = 8081
 
 c = Client(IP, PORT)
 print(c)
-FRAT1 = seq_read_fasta("/home/alumnos/douae/PycharmProjects/pne-studentslab/S04/text files/Homo_sapiens_FRAT1_sequence.txt")
+FRAT1 = seq_read_fasta("/S04/text files/FRAT1.txt")
 print(FRAT1)
 number = 1
 start = 0

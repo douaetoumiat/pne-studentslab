@@ -17,7 +17,7 @@ def header(seq):
 
 
 
-FILENAME = "/home/alumnos/douae/PycharmProjects/pne-studentslab/S04/text files/Homo_sapiens_ADA_sequence.txt"
+FILENAME = "/S04/text files/ADA.txt"
 file_contents = Path(FILENAME).read_text()
 line= file_contents.split("\n")
 gene_sequence = header(line)

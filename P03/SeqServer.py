@@ -70,7 +70,7 @@ while True:
                     cs.close()
         elif msg[0:4] == "INFO":
 
-            termcolor.cprint(f" {msg[0:4]}", 'green')
+            termcolor.cprint(f"{msg[0:4]}", 'green')
             sequence = msg[4:].upper().strip()
             seq = Seq(sequence)
             bases_dict = seq.count()
@@ -91,9 +91,28 @@ while True:
             sequence = msg[4:].upper().strip()
             seq = Seq(sequence)
             complement = seq.complement()
-            response1 = f"Complement:{complement} \n"
+            response1 = f"{complement} \n"
             print(response1)
             cs.send(response1.encode())
+            cs.close()
+        elif msg[0:3] == "REV":
+
+            termcolor.cprint(f"{msg[0:3]}", 'green')
+            sequence = msg[4:].upper().strip()
+            seq = Seq(sequence)
+            reverse = seq.reverse()
+            response1 = f"{reverse} \n"
+            print(response1)
+            cs.send(response1.encode())
+            cs.close()
+        elif msg[0:4] == "GENE":
+
+            termcolor.cprint(f"{msg[0:4]}", 'green')
+            seq = Seq()
+            filename = "/home/alumnos/douae/PycharmProjects/pne-studentslab/S04/text files/" + msg[4:].strip() + ".txt"
+            gene = seq.read_fasta(filename)
+            print(gene)
+            cs.send(gene.encode())
             cs.close()
 
         else:

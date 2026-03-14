@@ -13,7 +13,7 @@ PORT = 8081
 
 
 c = Client(IP, PORT)
-genes = ["Danio_rerio_U5_sequence.txt","Homo_sapiens_FRAT1_sequence.txt","Homo_sapiens_ADA_sequence.txt"]
+genes = ["U5.txt","FRAT1.txt","ADA.txt"]
 for i in range(len(genes)):
     bases = (seq_read_fasta("/home/alumnos/douae/PycharmProjects/pne-studentslab/S04/text files/"+genes[i]))
 
