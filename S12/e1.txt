@@ -1,0 +1,10 @@
+Run the webserver-2. Open the browser and connect to the URL: http://127.0.0.1:8080/hello
+
+Which is the request line?GET /hello HTTP/1.1
+Which is the resource that the client is asking for? (the path)
+The web response to the message hello .
+Repeat the exercise for this URL:http://127.0.0.1:8080/file.html
+Repeat the exercise for this URL: http://127.0.0.1:8080/hi/there?name=virus&type=corona
+
+What should be the URL that we have to write in the browser for accessing the /dna/u5 resource?
+http://127.0.0.1:8080/dna/u5
