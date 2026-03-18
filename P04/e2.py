@@ -30,7 +30,7 @@ def process_client(s):
     # header
     # blank line
     # Body (content to send)
-    file_contents = Path("/home/alumnos/douae/PycharmProjects/pne-studentslab/P04/html/info/A.html").read_text()
+    file_contents = Path("html/info/A.html").read_text()
     # This new contents are written in HTML language
     body = file_contents
     # -- Status line: We respond that everything is ok (200 code)
