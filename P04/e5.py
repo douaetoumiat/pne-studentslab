@@ -49,7 +49,7 @@ def process_client(s):
     # -- Build the message by joining together all the parts
         response_msg = status_line + header + "\n" + body
         cs.send(response_msg.encode())
-    elif path == "HTTP/1.1":
+    elif path == "/":
         file_contents = Path(f"html/info/index.html").read_text()
         # This new contents are written in HTML language
         body = file_contents
