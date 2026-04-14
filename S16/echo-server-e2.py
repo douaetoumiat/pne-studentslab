@@ -36,8 +36,9 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         if "GET / HTTP/1.1" == self.requestline:
             contents = Path('html/form-e2.html').read_text()
         elif "GET /echo?" == self.requestline[0:10]:
-            if arguments["chk"][0] == "on" :
-                contents =f"""<!DOCTYPE html>
+            try:
+                if arguments["chk"][0] == "on" :
+                    contents =f"""<!DOCTYPE html>
                         <html lang="en">
                         <head>
                         <meta charset="utf-8">
@@ -49,8 +50,8 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                         </form>
                         </body>
                         </html>"""
-            else:
-                contents = f"""<!DOCTYPE html>
+            except KeyError:
+                    contents = f"""<!DOCTYPE html>
                                         <html lang="en">
                                         <head>
                                         <meta charset="utf-8">
