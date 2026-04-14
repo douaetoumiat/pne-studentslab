@@ -34,20 +34,34 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         # Open the form1.html file
         # Read the index from the file
         if "GET / HTTP/1.1" == self.requestline:
-            contents = Path('html/form-e1.html').read_text()
+            contents = Path('html/form-e2.html').read_text()
         elif "GET /echo?" == self.requestline[0:10]:
-            contents =f"""<!DOCTYPE html>
+            if arguments["chk"][0] == "on" :
+                contents =f"""<!DOCTYPE html>
                         <html lang="en">
                         <head>
                         <meta charset="utf-8">
                         <title> ECHO FORM </title>
                         </head>
                         <body>
-                        <p>{arguments["msg"][0]}</p>
+                        <p>{(arguments["msg"][0]).upper()}</p>
                         <a href="http://127.0.0.1:8080">Main page</a>
                         </form>
                         </body>
                         </html>"""
+            else:
+                contents = f"""<!DOCTYPE html>
+                                        <html lang="en">
+                                        <head>
+                                        <meta charset="utf-8">
+                                        <title> ECHO FORM </title>
+                                        </head>
+                                        <body>
+                                        <p>{(arguments["msg"][0])}</p>
+                                        <a href="http://127.0.0.1:8080">Main page</a>
+                                        </form>
+                                        </body>
+                                        </html>"""
         else:
             contents = Path('html/error.html').read_text()
 
