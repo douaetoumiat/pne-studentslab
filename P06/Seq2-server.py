@@ -48,34 +48,14 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
 
 
-        elif "GET /echo?" == self.requestline[0:10]:
-            try:
-                if arguments["chk"][0] == "on" :
-                    contents =f"""<!DOCTYPE html>
-                        <html lang="en">
-                        <head>
-                        <meta charset="utf-8">
-                        <title> ECHO FORM </title>
-                        </head>
-                        <body>
-                        <p>{(arguments["msg"][0]).upper()}</p>
-                        <a href="http://127.0.0.1:8080">Main page</a>
-                        </form>
-                        </body>
-                        </html>"""
-            except KeyError:
-                    contents = f"""<!DOCTYPE html>
-                                        <html lang="en">
-                                        <head>
-                                        <meta charset="utf-8">
-                                        <title> ECHO FORM </title>
-                                        </head>
-                                        <body>
-                                        <p>{(arguments["msg"][0])}</p>
-                                        <a href="http://127.0.0.1:8080">Main page</a>
-                                        </form>
-                                        </body>
-                                        </html>"""
+        elif path == "/Get":
+            numbers = {0:"ACT",1:"CCGT",2:"AGAT",3:"ACHT",4:"GGATC"}
+            for key, items in numbers.items():
+                number = arguments["operation"][0]
+                if number == numbers[key]:
+                    sequence = numbers[key]
+                    contents = read_html_file("get.html").render(sequence=numbers)
+
         else:
             contents = Path('html/error.html').read_text()
 
