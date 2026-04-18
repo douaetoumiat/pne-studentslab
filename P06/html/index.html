@@ -5,26 +5,50 @@
     <title>Seq2 server</title>
 </head>
 <body>
-  <h1>Seq2 server</h1>
-<p>Access to the server</p>
-<hr>
-<form action ="Ping" method="get">
-    Is the server still alive?
-    <input type="submit" value="Ping">
+    <h1>Seq2 server</h1>
+    <p>Access to the server</p>
+    <hr>
+
+    <form action="/Ping" method="get">
+        Is the server still alive?
+        <input type="submit" value="Ping">
     </form>
+
     <br><br>
-      Choose operation:
-      <select name="operation">
-        <option value="0">0</option>
-        <option value="1">1</option>
-          <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <form action ="get" method="get">
-            <input type="submit" value="Get">
-      </select>
-       <br>
-</form>
+
+    <form action="/Get" method="get">
+        Choose a sequence:
+        <select name="sequence">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+        </select>
+        <input type="submit" value="Get">
+    </form>
+    <form action="/Gene" method="get">
+        Choose a gene:
+        <select name="genes">
+            <option value="0">ADA</option>
+            <option value="1">FRAT1</option>
+            <option value="2">FXN</option>
+            <option value="3">RNU6</option>
+            <option value="4">U5</option>
+        </select>
+        <input type="submit" value="Get">
+
+    </form>
+    <form action="/Operation" method="get">
+      Enter a sequence <input type="text" name="entered_seq">
+      <br><br>
+      Select operation:
+      <input type="radio" name="op" value="INFO" checked> INFO
+      <input type="radio" name="op" value="COMP"> COMP
+      <input type="radio" name="op" value="REV"> REV
+      <br><br>
+       <input type="submit" value="OPERATE!">
+    </form>
 
 </body>
 </html>

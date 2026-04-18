@@ -4,6 +4,7 @@ import termcolor
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 import jinja2 as j
+from Seq1 import Seq
 
 
 # provide a dictionary to build the form
@@ -46,16 +47,31 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         elif path ==  "/Ping":
                 contents = Path('html/ping.html').read_text()
 
-
-
         elif path == "/Get":
             numbers = {0:"ACT",1:"CCGT",2:"AGAT",3:"ACHT",4:"GGATC"}
-            for key, items in numbers.items():
-                number = arguments["operation"][0]
-                if number == numbers[key]:
-                    sequence = numbers[key]
-                    contents = read_html_file("get.html").render(sequence=numbers)
+            number = int(arguments["sequence"][0])
+            chosen_seq = numbers[number]
+            contents = read_html_file("get.html").render(sequence=chosen_seq,chosen_num=number)
 
+        elif path == "/Gene":
+            s = Seq()
+            genes_dict = {0: "ADA", 1: "FRAT1", 2: "FXN", 3: "RNU6", 4: "U5"}
+            number = int(arguments["genes"][0])
+            chosen_gene = s.read_fasta(f"text files/{genes_dict[number]}.txt")
+            contents = read_html_file("gene.html").render(Gene=chosen_gene, chosen_gene=genes_dict[number])
+
+        elif path == "/Operation":
+            seq_input = Seq(arguments["entered_seq"][0])
+            operation = arguments["op"][0]
+            if operation == "INFO":
+                result = seq_input.count()
+
+            elif operation == "COMP":
+                result = seq_input.complement()
+            elif operation == "REV":
+                result = seq_input.reverse()
+
+            contents = read_html_file("operation.html").render(sequence=seq_input, operation_type=operation,results= result)
         else:
             contents = Path('html/error.html').read_text()
 

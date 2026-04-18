@@ -58,7 +58,7 @@ def process_client(s):
 
         # -- Add the Content-Type header
         header = "Content-Type: text/html\n"
-
+'A': 2, 'T': 2, 'G': 2, 'C': 2}
         # -- Add the Content-Length
         header += f"Content-Length: {len(body)}\n"
 

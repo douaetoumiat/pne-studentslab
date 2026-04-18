@@ -77,24 +77,23 @@ class Seq:
 
     def count(self):
         s = "ACGT"
-        valid = True
-        h =  {"A" : 0,"T":0,"G":0,"C":0}
-        if self.strbases  is not None:
-            for i in range(0, len(self.strbases)):
-                if self.strbases[i] not in s:
-                    valid = False
-            if  valid :
-                for m in s:
-                  count = 0
-                  for n in self.strbases:
-                    if n == m:
-                        count += 1
-                  h[m] = count
-                return h
-            else :
-                return h
-        else :
-             return h
+        if not self.strbases:
+            return "No sequence provided."
+
+        for base in self.strbases:
+            if base not in s:
+                return "Error: Invalid bases detected in sequence."
+
+        total_bases = len(self.strbases)
+
+        report = f"Total bases: {total_bases} \n"
+
+        for m in s:
+            base_count = self.strbases.count(m)
+            percentage = (base_count / total_bases * 100) if total_bases > 0 else 0
+            report += f"Base {m}: {base_count} ({percentage:.2f}%) \n"
+
+        return report
 
 
 
