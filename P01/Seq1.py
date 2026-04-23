@@ -74,8 +74,19 @@ class Seq:
             return count
         else:
             return count
+    def biggest(self):
+        s = "ACGT"
+        list = []
+        biggest = 0
+        for m in s:
+            base_count = self.strbases.count(m)
 
+            if base_count > biggest:
+                list.append(f"{m}")
+                biggest = base_count
+        return list[-1]
     def count(self):
+
         s = "ACGT"
         if not self.strbases:
             return "No sequence provided."
@@ -92,6 +103,7 @@ class Seq:
             base_count = self.strbases.count(m)
             percentage = (base_count / total_bases * 100) if total_bases > 0 else 0
             report += f"Base {m}: {base_count} ({percentage:.2f}%) \n"
+
 
         return report
 
