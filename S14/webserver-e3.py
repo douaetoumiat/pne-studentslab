@@ -74,18 +74,3 @@ with socketserver.TCPServer(("", PORT), Handler) as httpd:
         print("Stopped by the user")
         httpd.server_close()
 
-text_html = f"""<!DOCTYPE html>
-                           <html lang="en" dir="ltr">
-                            <head>
-                            <meta charset="utf-8">
-                            </head>
-                            < body style="background-color: lightcyan;">
-                            <H1 style="background-color: powderblue;">Karyotype of the {arguments['entered_species'][0]}:</H1>"""
-
-end_html = """ </body>
-                            </html>"""
-for i in range(len(karyotype)):
-    name = karyotype[i]
-    text_html = text_html + f"<p>{name}</p>"
-contents = text_html + end_html
-content_type = 'text/html'

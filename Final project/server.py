@@ -3,6 +3,7 @@ import http.client
 import socketserver
 import termcolor
 import json
+import jinja2 as j
 from Seq1 import *
 from urllib.parse import parse_qs, urlparse
 
@@ -12,7 +13,10 @@ PORT = 8080
 
 socketserver.TCPServer.allow_reuse_address = True
 
-
+def read_html_file(filename):
+    contents = Path("html/" + filename).read_text()
+    contents = j.Template(contents)
+    return contents
 
 class TestHandler(http.server.BaseHTTPRequestHandler):
 
@@ -30,7 +34,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         print(path)  # we get it from here
         arguments = parse_qs(url_path.query)
 
-
+        SERVER = "rest.ensembl.org"
 
         if resource == "/":
             # Read the file
@@ -38,7 +42,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             content_type = 'text/html'
             error_code = 200
         elif resource == "/ListSpecies":
-            SERVER = "rest.ensembl.org"
+
             ENDPOINT = f"/info/species"
             PARAMS = '?content-type=application/json'
             conn = http.client.HTTPSConnection(SERVER)
@@ -82,18 +86,60 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             contents = text_html + end_html
             content_type = 'text/html'
             error_code = 200
-        elif resource == "/Karyotype":
-            SERVER = "rest.ensembl.org"
-            ENDPOINT = f"/info/assembly/{arguments['entered_species'][0]}"
-            PARAMS = '?content-type=application/json'
+        elif resource == "/karyotype":
+            species = arguments['entered_species'][0]
+            ENDPOINT = f"/info/assembly/{species}?"
+            PARAMS = 'content-type=application/json'
             conn = http.client.HTTPSConnection(SERVER)
             conn.request("GET", ENDPOINT + PARAMS)
+
             response = conn.getresponse()
             data = json.loads(response.read().decode())
-            print(data)
             karyotype = data["karyotype"]
+            text_html = f"""<!DOCTYPE html>
+                                       <html lang="en" dir="ltr">
+                                        <head>
+                                        <meta charset="utf-8">
+                                        </head>
+                                        <body  style="background-color: lightcyan;">
+                                        <H1 style="background-color: powderblue;">Karyotype of the {arguments['entered_species'][0]}:</H1>"""
 
-            print(karyotype)
+            end_html = """ </body>
+                           </html>"""
+            for i in range(len(karyotype)):
+                name = karyotype[i]
+                text_html = text_html + f"<p>{name}</p>"
+            contents = str( text_html + end_html)
+            content_type = 'text/html'
+            error_code = 200
+        elif resource == "/chromosomeLength":
+            try:
+                species2 = arguments['species'][0]
+                chromo = arguments['chromo'][0]
+
+                ENDPOINT = f"/info/assembly/{species2}?"
+                PARAMS = 'content-type=application/json'
+                conn = http.client.HTTPSConnection(SERVER)
+                conn.request("GET", ENDPOINT + PARAMS)
+                ENDPOINT = f"/info/assembly/{species2}?"
+                PARAMS = 'content-type=application/json'
+                conn = http.client.HTTPSConnection(SERVER)
+                conn.request("GET", ENDPOINT + PARAMS)
+                response = conn.getresponse()
+                data = json.loads(response.read().decode())
+                print(data)
+                dict_chrom_mix =data["top_level_region"]
+                result = " "
+                for i in range(len(dict_chrom_mix)):
+                    if dict_chrom_mix[i]["name"] == f"{chromo}":
+                        result =  dict_chrom_mix[i]["length"]
+                contents = read_html_file("chromo_length.html").render(result=result)
+                content_type = 'text/html'
+                error_code = 200
+            except KeyError:
+                contents = Path('html/error.html').read_text()
+                content_type = 'text/html'
+                error_code = 404
 
         else:
             contents = Path('html/error.html').read_text()
