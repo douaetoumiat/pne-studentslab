@@ -30,6 +30,8 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         print(path)  # we get it from here
         arguments = parse_qs(url_path.query)
 
+
+
         if resource == "/":
             # Read the file
             contents = Path('html/index.html').read_text()
@@ -39,16 +41,14 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             SERVER = "rest.ensembl.org"
             ENDPOINT = f"/info/species"
             PARAMS = '?content-type=application/json'
-            URL = SERVER + ENDPOINT + PARAMS
             conn = http.client.HTTPSConnection(SERVER)
             conn.request("GET", ENDPOINT + PARAMS)
-
             response = conn.getresponse()
             data = json.loads(response.read().decode())
             species = data["species"]
+            vertebrates = [s for s in species if s['division'] == 'EnsemblVertebrates']
             number_species =  len(species)
             limit_selected = int(arguments["entered_limit"][0])
-            vertebrates = [s for s in species  if s['division'] == 'EnsemblVertebrates']
             list_names = []
             text_html =f"""<!DOCTYPE html>
                         <html lang="en">
@@ -82,6 +82,19 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             contents = text_html + end_html
             content_type = 'text/html'
             error_code = 200
+        elif resource == "/Karyotype":
+            SERVER = "rest.ensembl.org"
+            ENDPOINT = f"/info/assembly/{arguments['entered_species'][0]}"
+            PARAMS = '?content-type=application/json'
+            conn = http.client.HTTPSConnection(SERVER)
+            conn.request("GET", ENDPOINT + PARAMS)
+            response = conn.getresponse()
+            data = json.loads(response.read().decode())
+            print(data)
+            karyotype = data["karyotype"]
+
+            print(karyotype)
+
         else:
             contents = Path('html/error.html').read_text()
             content_type = 'text/html'
