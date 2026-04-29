@@ -41,20 +41,23 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             contents = Path('html/index.html').read_text()
             content_type = 'text/html'
             error_code = 200
-        elif resource == "/ListSpecies":
-
-            ENDPOINT = f"/info/species"
-            PARAMS = '?content-type=application/json'
-            conn = http.client.HTTPSConnection(SERVER)
-            conn.request("GET", ENDPOINT + PARAMS)
-            response = conn.getresponse()
-            data = json.loads(response.read().decode())
-            species = data["species"]
-            vertebrates = [s for s in species if s['division'] == 'EnsemblVertebrates']
-            number_species =  len(species)
-            limit_selected = int(arguments["entered_limit"][0])
-            list_names = []
-            text_html =f"""<!DOCTYPE html>
+        elif resource == "/listSpecies":
+            try:
+                ENDPOINT = f"/info/species"
+                PARAMS = '?content-type=application/json'
+                conn = http.client.HTTPSConnection(SERVER)
+                conn.request("GET", ENDPOINT + PARAMS)
+                response = conn.getresponse()
+                data = json.loads(response.read().decode())
+                species = data["species"]
+                if " " in species :
+                    species.replace(" " or "_" or "+","%20")
+                vertebrates = [s for s in species if s['division'] == 'EnsemblVertebrates']
+                number_species =  len(species)
+                limit_selected = int(arguments["limit"][0])
+                print(limit_selected)
+                list_names = []
+                text_html =f"""<!DOCTYPE html>
                         <html lang="en">
                         <head>
                             <meta charset="UTF-8">
@@ -70,25 +73,34 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                 
                             
                         """
-            end_html = """</ul>
+                end_html = """</ul>
                         </body>
                         </html>"""
 
 
-            for i in range(limit_selected):
-                list_names.append(vertebrates[i]["common_name"])
+                for i in range(limit_selected):
+                    list_names.append(vertebrates[i]["common_name"])
 
-            for i in range(len(list_names)):
+                for i in range(len(list_names)):
 
-                name = list_names[i]
-                text_html = text_html + f"<li>{name}</li>\n"
+                    name = list_names[i]
+                    text_html = text_html + f"<li>{name}</li>\n"
 
-            contents = text_html + end_html
-            content_type = 'text/html'
-            error_code = 200
+                contents = text_html + end_html
+                content_type = 'text/html'
+                error_code = 200
+
+
+            except KeyError:
+                contents = Path('html/error.html').read_text()
+                content_type = 'text/html'
+                error_code = 404
+
         elif resource == "/karyotype":
-            species = arguments['entered_species'][0]
-            ENDPOINT = f"/info/assembly/{species}?"
+            species = arguments['species'][0]
+            species.split("+")
+            print(species)
+            ENDPOINT = f"/info/assembly/{species[0] +"%20"+ species[1]}?"
             PARAMS = 'content-type=application/json'
             conn = http.client.HTTPSConnection(SERVER)
             conn.request("GET", ENDPOINT + PARAMS)
@@ -102,7 +114,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                         <meta charset="utf-8">
                                         </head>
                                         <body  style="background-color: lightcyan;">
-                                        <H1 style="background-color: powderblue;">Karyotype of the {arguments['entered_species'][0]}:</H1>"""
+                                        <H1 style="background-color: powderblue;">Karyotype of the {species}:</H1>"""
 
             end_html = """ </body>
                            </html>"""
@@ -140,7 +152,8 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 contents = Path('html/error.html').read_text()
                 content_type = 'text/html'
                 error_code = 404
-
+        elif resource == "/geneLookup":
+            pass
         else:
             contents = Path('html/error.html').read_text()
             content_type = 'text/html'
