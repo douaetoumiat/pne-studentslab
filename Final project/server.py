@@ -2,7 +2,6 @@ import http.server
 import http.client
 import socketserver
 import termcolor
-from pathlib import Path
 import json
 from Seq1 import *
 from urllib.parse import parse_qs, urlparse
@@ -51,16 +50,37 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             limit_selected = int(arguments["entered_limit"][0])
             vertebrates = [s for s in species  if s['division'] == 'EnsemblVertebrates']
             list_names = []
+            text_html =f"""<!DOCTYPE html>
+                        <html lang="en">
+                        <head>
+                            <meta charset="UTF-8">
+                            <title>Species List</title>
+                        </head>
+                        <body  style="background-color: lightcyan;">
+                        <H1 style="background-color: powderblue;">SPECIES LIST</H1>
+                        <P>The number of species in the database is: {number_species}</P>
+                        <p>The limit you have selected is : {limit_selected}</p>
+                        <p>The list of species :</p>
+
+                        <ul>
+                                
+                            
+                        """
+            end_html = """</ul>
+                        </body>
+                        </html>"""
+
 
             for i in range(limit_selected):
                 list_names.append(vertebrates[i]["common_name"])
 
             for i in range(len(list_names)):
-                number = 0
-                name = list_names[i]
-                contents = read_html_file("species_list.html").render(name = 0)
-                number += 1
 
+                name = list_names[i]
+                text_html = text_html + f"<li>{name}</li>\n"
+
+            contents = text_html + end_html
+            content_type = 'text/html'
             error_code = 200
         else:
             contents = Path('html/error.html').read_text()
