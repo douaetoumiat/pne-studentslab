@@ -97,18 +97,21 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 error_code = 404
 
         elif resource == "/karyotype":
-            species = arguments['species'][0]
-            species.split("+")
-            print(species)
-            ENDPOINT = f"/info/assembly/{species[0] +"%20"+ species[1]}?"
-            PARAMS = 'content-type=application/json'
-            conn = http.client.HTTPSConnection(SERVER)
-            conn.request("GET", ENDPOINT + PARAMS)
+            try:
+                species = arguments['species'][0]
+                if " " or "+" in species:
+                    species = species.replace(" ", "_").replace("+", "_")
+                    print(species)
 
-            response = conn.getresponse()
-            data = json.loads(response.read().decode())
-            karyotype = data["karyotype"]
-            text_html = f"""<!DOCTYPE html>
+                ENDPOINT =f"/info/assembly/{species}?"
+                PARAMS = 'content-type=application/json'
+                conn = http.client.HTTPSConnection(SERVER)
+                conn.request("GET", ENDPOINT + PARAMS)
+
+                response = conn.getresponse()
+                data = json.loads(response.read().decode())
+                karyotype = data["karyotype"]
+                text_html = f"""<!DOCTYPE html>
                                        <html lang="en" dir="ltr">
                                         <head>
                                         <meta charset="utf-8">
@@ -116,14 +119,19 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                                         <body  style="background-color: lightcyan;">
                                         <H1 style="background-color: powderblue;">Karyotype of the {species}:</H1>"""
 
-            end_html = """ </body>
+                end_html = """ </body>
                            </html>"""
-            for i in range(len(karyotype)):
-                name = karyotype[i]
-                text_html = text_html + f"<p>{name}</p>"
-            contents = str( text_html + end_html)
-            content_type = 'text/html'
-            error_code = 200
+                for i in range(len(karyotype)):
+                    name = karyotype[i]
+                    text_html = text_html + f"<p>{name}</p>"
+                contents = str( text_html + end_html)
+                content_type = 'text/html'
+                error_code = 200
+            except KeyError:
+                contents = Path('html/error.html').read_text()
+                content_type = 'text/html'
+                error_code = 404
+
         elif resource == "/chromosomeLength":
             try:
                 species2 = arguments['species'][0]
@@ -153,7 +161,47 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 content_type = 'text/html'
                 error_code = 404
         elif resource == "/geneLookup":
-            pass
+            try:
+                species = "homo_sapiens"
+                gene = arguments["gene"][0]
+                ENDPOINT = f"/lookup/symbol/{species}/{gene}?"
+                PARAMS = 'content-type=application/json'
+                conn = http.client.HTTPSConnection(SERVER)
+                conn.request("GET", ENDPOINT + PARAMS)
+
+                response = conn.getresponse()
+                data = json.loads(response.read().decode())
+                id = data["id"]
+                contents = read_html_file("gene_id.html").render(gene=gene,id=id)
+                content_type = 'text/html'
+                error_code = 200
+
+            except KeyError:
+                contents = Path('html/error.html').read_text()
+                content_type = 'text/html'
+                error_code = 404
+        elif resource == "/geneSeq":
+            species = "homo_sapiens"
+            gene = arguments["gene"][0]
+            ENDPOINT = f"/lookup/symbol/{species}/{gene}?"
+            PARAMS = 'content-type=application/json'
+            conn = http.client.HTTPSConnection(SERVER)
+            conn.request("GET", ENDPOINT + PARAMS)
+
+            response = conn.getresponse()
+            data = json.loads(response.read().decode())
+            id = data["id"]
+            ENDPOINT = f"/sequence/id/{id}?"
+            PARAMS = 'content-type=application/json'
+            conn = http.client.HTTPSConnection(SERVER)
+            conn.request("GET", ENDPOINT + PARAMS)
+
+            response = conn.getresponse()
+            data = json.loads(response.read().decode())
+            seq = data["seq"]
+            contents = read_html_file("gene_seq.html").render(seq=seq,gene=gene)
+            content_type = 'text/html'
+            error_code = 200
         else:
             contents = Path('html/error.html').read_text()
             content_type = 'text/html'
