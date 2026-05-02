@@ -17,6 +17,19 @@ def read_html_file(filename):
     contents = Path("html/" + filename).read_text()
     contents = j.Template(contents)
     return contents
+def get_id(name):
+    species = "homo_sapiens"
+    gene = name
+    SERVER = "rest.ensembl.org"
+    ENDPOINT = f"/lookup/symbol/{species}/{gene}?"
+    PARAMS = 'content-type=application/json'
+    conn = http.client.HTTPSConnection(SERVER)
+    conn.request("GET", ENDPOINT + PARAMS)
+
+    response = conn.getresponse()
+    data = json.loads(response.read().decode())
+    id = data["id"]
+    return id
 
 class TestHandler(http.server.BaseHTTPRequestHandler):
 
@@ -162,16 +175,9 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 error_code = 404
         elif resource == "/geneLookup":
             try:
-                species = "homo_sapiens"
-                gene = arguments["gene"][0]
-                ENDPOINT = f"/lookup/symbol/{species}/{gene}?"
-                PARAMS = 'content-type=application/json'
-                conn = http.client.HTTPSConnection(SERVER)
-                conn.request("GET", ENDPOINT + PARAMS)
 
-                response = conn.getresponse()
-                data = json.loads(response.read().decode())
-                id = data["id"]
+                gene = arguments["gene"][0]
+                id = get_id(gene)
                 contents = read_html_file("gene_id.html").render(gene=gene,id=id)
                 content_type = 'text/html'
                 error_code = 200
@@ -181,16 +187,9 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 content_type = 'text/html'
                 error_code = 404
         elif resource == "/geneSeq":
-            species = "homo_sapiens"
-            gene = arguments["gene"][0]
-            ENDPOINT = f"/lookup/symbol/{species}/{gene}?"
-            PARAMS = 'content-type=application/json'
-            conn = http.client.HTTPSConnection(SERVER)
-            conn.request("GET", ENDPOINT + PARAMS)
 
-            response = conn.getresponse()
-            data = json.loads(response.read().decode())
-            id = data["id"]
+            gene = arguments["gene"][0]
+            id = get_id(gene)
             ENDPOINT = f"/sequence/id/{id}?"
             PARAMS = 'content-type=application/json'
             conn = http.client.HTTPSConnection(SERVER)
@@ -202,6 +201,24 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             contents = read_html_file("gene_seq.html").render(seq=seq,gene=gene)
             content_type = 'text/html'
             error_code = 200
+        elif resource == "/geneInfo":
+            gene = arguments["gene"][0]
+            id = get_id(gene)
+            ENDPOINT = f"/lookup/id/{id}?"
+            PARAMS = 'content-type=application/json'
+            conn = http.client.HTTPSConnection(SERVER)
+            conn.request("GET", ENDPOINT + PARAMS)
+            response = conn.getresponse()
+            data = json.loads(response.read().decode())
+            start = data["start"]
+            end = data["end"]
+            name = data["seq_region_name"]
+            length =  end - start
+            contents = read_html_file("gene_info.html").render(id=id, gene=gene,start=start,end=end,name =name,length =length)
+            content_type = 'text/html'
+            error_code = 200
+
+
         else:
             contents = Path('html/error.html').read_text()
             content_type = 'text/html'
