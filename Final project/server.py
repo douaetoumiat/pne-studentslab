@@ -187,36 +187,97 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 content_type = 'text/html'
                 error_code = 404
         elif resource == "/geneSeq":
+            try:
+                gene = arguments["gene"][0]
+                id = get_id(gene)
+                ENDPOINT = f"/sequence/id/{id}?"
+                PARAMS = 'content-type=application/json'
+                conn = http.client.HTTPSConnection(SERVER)
+                conn.request("GET", ENDPOINT + PARAMS)
 
-            gene = arguments["gene"][0]
-            id = get_id(gene)
-            ENDPOINT = f"/sequence/id/{id}?"
-            PARAMS = 'content-type=application/json'
-            conn = http.client.HTTPSConnection(SERVER)
-            conn.request("GET", ENDPOINT + PARAMS)
-
-            response = conn.getresponse()
-            data = json.loads(response.read().decode())
-            seq = data["seq"]
-            contents = read_html_file("gene_seq.html").render(seq=seq,gene=gene)
-            content_type = 'text/html'
-            error_code = 200
+                response = conn.getresponse()
+                data = json.loads(response.read().decode())
+                seq = data["seq"]
+                contents = read_html_file("gene_seq.html").render(seq=seq,gene=gene)
+                content_type = 'text/html'
+                error_code = 200
+            except KeyError:
+                contents = Path('html/error.html').read_text()
+                content_type = 'text/html'
+                error_code = 404
         elif resource == "/geneInfo":
-            gene = arguments["gene"][0]
-            id = get_id(gene)
-            ENDPOINT = f"/lookup/id/{id}?"
-            PARAMS = 'content-type=application/json'
-            conn = http.client.HTTPSConnection(SERVER)
-            conn.request("GET", ENDPOINT + PARAMS)
-            response = conn.getresponse()
-            data = json.loads(response.read().decode())
-            start = data["start"]
-            end = data["end"]
-            name = data["seq_region_name"]
-            length =  end - start
-            contents = read_html_file("gene_info.html").render(id=id, gene=gene,start=start,end=end,name =name,length =length)
-            content_type = 'text/html'
-            error_code = 200
+            try:
+                gene = arguments["gene"][0]
+                id = get_id(gene)
+                ENDPOINT = f"/lookup/id/{id}?"
+                PARAMS = 'content-type=application/json'
+                conn = http.client.HTTPSConnection(SERVER)
+                conn.request("GET", ENDPOINT + PARAMS)
+                response = conn.getresponse()
+                data = json.loads(response.read().decode())
+
+                start = data["start"]
+                end = data["end"]
+                name = data["seq_region_name"]
+                length =  end - start
+                contents = read_html_file("gene_info.html").render(id=id, gene=gene,start=start,end=end,name =name,length =length)
+                content_type = 'text/html'
+                error_code = 200
+            except KeyError:
+                contents = Path('html/error.html').read_text()
+                content_type = 'text/html'
+                error_code = 404
+        elif resource == "/geneCalc":
+            try:
+                gene = arguments["gene"][0]
+                id = get_id(gene)
+                ENDPOINT = f"/sequence/id/{id}?"
+                PARAMS = 'content-type=application/json'
+                conn = http.client.HTTPSConnection(SERVER)
+                conn.request("GET", ENDPOINT + PARAMS)
+
+                response = conn.getresponse()
+                data = json.loads(response.read().decode())
+                seq = data["seq"]
+                seq = Seq(seq)
+                info = seq.count()
+                contents = read_html_file("gene_calc.html").render(info=info, gene=gene)
+                content_type = 'text/html'
+                error_code = 200
+
+            except KeyError:
+                contents = Path('html/error.html').read_text()
+                content_type = 'text/html'
+                error_code = 404
+        elif resource == "/geneList":
+            try:
+                start = arguments["start"][0]
+                end = arguments["end"][0]
+                chromo = arguments["chromo"][0]
+                ENDPOINT = f"overlap/region/human/{chromo}:{start}-{end}?"
+                PARAMS = 'content-type=application/json;feature=gene'
+                conn = http.client.HTTPSConnection(SERVER)
+                conn.request("GET", ENDPOINT + PARAMS)
+
+                response = conn.getresponse()
+                data = json.loads(response.read().decode())
+                gene_list = []
+                list_text = ""
+                for i in range(len(data)):
+                    if  data[i]["feature_type"] == "gene":
+                        gene_list.append(data[i]["external_name"])
+
+                for i in range(len(gene_list)):
+                    name = gene_list[i]
+                    list_text =list_text + f"<li>{name}</li>\n"
+                contents = read_html_file("gene_overlap.html").render(chromo=chromo,list_text=list_text)
+                content_type = 'text/html'
+                error_code = 200
+
+            except KeyError:
+                contents = Path('html/error.html').read_text()
+                content_type = 'text/html'
+                error_code = 404
 
 
         else:
