@@ -31,6 +31,7 @@ def get_id(name):
     id = data["id"]
     return id
 
+
 class TestHandler(http.server.BaseHTTPRequestHandler):
 
     def do_GET(self):
@@ -46,7 +47,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         path = url_path.path
         print(path)  # we get it from here
         arguments = parse_qs(url_path.query)
-
+        json_marker = arguments["json"][0]
         SERVER = "rest.ensembl.org"
 
         if resource == "/":
@@ -70,40 +71,16 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 limit_selected = int(arguments["limit"][0])
                 print(limit_selected)
                 list_names = []
-                text_html =f"""<!DOCTYPE html>
-                        <html lang="en">
-                        <head>
-                            <meta charset="UTF-8">
-                            <title>Species List</title>
-                        </head>
-                        <body  style="background-color: lightcyan;">
-                        <H1 style="background-color: powderblue;">SPECIES LIST</H1>
-                        <P>The number of species in the database is: {number_species}</P>
-                        <p>The limit you have selected is : {limit_selected}</p>
-                        <p>The list of species :</p>
-
-                        <ul>
-                                
-                            
-                        """
-                end_html = """</ul>
-                        </body>
-                        </html>"""
-
-
+                text_html = ""
                 for i in range(limit_selected):
                     list_names.append(vertebrates[i]["common_name"])
-
                 for i in range(len(list_names)):
-
                     name = list_names[i]
                     text_html = text_html + f"<li>{name}</li>\n"
-
-                contents = text_html + end_html
+                if
+                contents = read_html_file("limit_species.html").render(number_species=number_species, limit_selected=limit_selected,text_html=text_html)
                 content_type = 'text/html'
                 error_code = 200
-
-
             except KeyError:
                 contents = Path('html/error.html').read_text()
                 content_type = 'text/html'
