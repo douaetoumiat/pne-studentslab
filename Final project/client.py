@@ -28,12 +28,11 @@ for i in range(len(ENDPOINTS)):
 
 # -- Read the response's body
     data = r1.read().decode("utf-8")
-# -- Create a variable with the data,
-# -- form the JSON received
-    answer = json.loads(data)
+
+
 
     print("CONTENT: ")
 
 # Print the information in the object
-    print(answer)
+    print(data)
 

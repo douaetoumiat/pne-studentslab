@@ -222,9 +222,15 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 end = data["end"]
                 name = data["seq_region_name"]
                 length =  end - start
-                contents = read_html_file("gene_info.html").render(id=id, gene=gene,start=start,end=end,name =name,length =length)
-                content_type = 'text/html'
-                error_code = 200
+                if json_marker == "1":
+                    d = {"Id": id, "Gene": gene,"Start":start,"End":end,"Chromosome":name,"Length":length}
+                    contents = json.dumps(d)
+                    error_code = 200
+                    content_type = 'application/json'
+                else:
+                    contents = read_html_file("gene_info.html").render(id=id, gene=gene,start=start,end=end,name =name,length =length)
+                    content_type = 'text/html'
+                    error_code = 200
             except KeyError:
                 contents = Path('html/error.html').read_text()
                 content_type = 'text/html'
@@ -242,10 +248,22 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 data = json.loads(response.read().decode())
                 seq = data["seq"]
                 seq = Seq(seq)
+                d = {"Gene": gene}
                 info = seq.count()
-                contents = read_html_file("gene_calc.html").render(info=info, gene=gene)
-                content_type = 'text/html'
-                error_code = 200
+                info_s = info.splitlines()
+                for i in range(4):
+                     info_ss = info_s[i].split(":")
+                    d[info_ss[0]]=[info_ss[1]]
+                if json_marker == "1":
+
+                    j = json.dumps(d)
+                    contents = j
+                    error_code = 200
+                    content_type = 'application/json'
+                else:
+                    contents = read_html_file("gene_calc.html").render(info=info, gene=gene)
+                    content_type = 'text/html'
+                    error_code = 200
 
             except KeyError:
                 contents = Path('html/error.html').read_text()
@@ -272,9 +290,16 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 for i in range(len(gene_list)):
                     name = gene_list[i]
                     list_text =list_text + f"<li>{name}</li>\n"
-                contents = read_html_file("gene_overlap.html").render(chromo=chromo,list_text=list_text)
-                content_type = 'text/html'
-                error_code = 200
+                if json_marker == "1":
+                    d = {"Chromosome":chromo,"Human gene":gene_list}
+                    j = json.dumps(d)
+                    contents = j
+                    error_code = 200
+                    content_type = 'application/json'
+                else:
+                    contents = read_html_file("gene_overlap.html").render(chromo=chromo,list_text=list_text)
+                    content_type = 'text/html'
+                    error_code = 200
 
             except KeyError:
                 contents = Path('html/error.html').read_text()
