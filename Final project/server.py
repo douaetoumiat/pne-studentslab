@@ -47,7 +47,10 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         path = url_path.path
         print(path)  # we get it from here
         arguments = parse_qs(url_path.query)
-        json_marker = arguments["json"][0]
+        try:
+            json_marker = arguments["json"][0]
+        except KeyError:
+            json_marker = 0
         SERVER = "rest.ensembl.org"
 
         if resource == "/":
@@ -77,10 +80,15 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 for i in range(len(list_names)):
                     name = list_names[i]
                     text_html = text_html + f"<li>{name}</li>\n"
-                if
-                contents = read_html_file("limit_species.html").render(number_species=number_species, limit_selected=limit_selected,text_html=text_html)
-                content_type = 'text/html'
-                error_code = 200
+                if json_marker == "1":
+                    d = {"species list":list_names}
+                    contents = json.dumps(d)
+                    error_code = 200
+                    content_type = 'application/json'
+                else:
+                    contents = read_html_file("limit_species.html").render(number_species=number_species, limit_selected=limit_selected,text_html=text_html)
+                    content_type = 'text/html'
+                    error_code = 200
             except KeyError:
                 contents = Path('html/error.html').read_text()
                 content_type = 'text/html'
@@ -101,22 +109,21 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 response = conn.getresponse()
                 data = json.loads(response.read().decode())
                 karyotype = data["karyotype"]
-                text_html = f"""<!DOCTYPE html>
-                                       <html lang="en" dir="ltr">
-                                        <head>
-                                        <meta charset="utf-8">
-                                        </head>
-                                        <body  style="background-color: lightcyan;">
-                                        <H1 style="background-color: powderblue;">Karyotype of the {species}:</H1>"""
-
-                end_html = """ </body>
-                           </html>"""
+                text_html = ""
+                list_karyo =[]
                 for i in range(len(karyotype)):
                     name = karyotype[i]
-                    text_html = text_html + f"<p>{name}</p>"
-                contents = str( text_html + end_html)
-                content_type = 'text/html'
-                error_code = 200
+                    list_karyo.append(name)
+                    text_html = text_html + f"<p>{name}</p>\n"
+                if json_marker == "1":
+                    d = {"species":species,"karyotype":list_karyo}
+                    contents = json.dumps(d)
+                    error_code = 200
+                    content_type = 'application/json'
+                else:
+                    contents = read_html_file("karyotype.html").render(species=species,text_html=text_html)
+                    content_type = 'text/html'
+                    error_code = 200
             except KeyError:
                 contents = Path('html/error.html').read_text()
                 content_type = 'text/html'
@@ -143,9 +150,15 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 for i in range(len(dict_chrom_mix)):
                     if dict_chrom_mix[i]["name"] == f"{chromo}":
                         result =  dict_chrom_mix[i]["length"]
-                contents = read_html_file("chromo_length.html").render(result=result)
-                content_type = 'text/html'
-                error_code = 200
+                if json_marker == "1":
+                    d = {"Chromosome":chromo,"Length":result}
+                    contents = json.dumps(d)
+                    error_code = 200
+                    content_type = 'application/json'
+                else:
+                    contents = read_html_file("chromo_length.html").render(chromo=chromo,result=result)
+                    content_type = 'text/html'
+                    error_code = 200
             except KeyError:
                 contents = Path('html/error.html').read_text()
                 content_type = 'text/html'
@@ -155,9 +168,15 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
                 gene = arguments["gene"][0]
                 id = get_id(gene)
-                contents = read_html_file("gene_id.html").render(gene=gene,id=id)
-                content_type = 'text/html'
-                error_code = 200
+                if json_marker == "1":
+                    d = {"Gene": gene, "Id": id}
+                    contents = json.dumps(d)
+                    error_code = 200
+                    content_type = 'application/json'
+                else:
+                    contents = read_html_file("gene_id.html").render(gene=gene,id=id)
+                    content_type = 'text/html'
+                    error_code = 200
 
             except KeyError:
                 contents = Path('html/error.html').read_text()
@@ -175,9 +194,15 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 response = conn.getresponse()
                 data = json.loads(response.read().decode())
                 seq = data["seq"]
-                contents = read_html_file("gene_seq.html").render(seq=seq,gene=gene)
-                content_type = 'text/html'
-                error_code = 200
+                if json_marker == "1":
+                    d = {"Gene": gene, "Sequence": seq}
+                    contents = json.dumps(d)
+                    error_code = 200
+                    content_type = 'application/json'
+                else:
+                    contents = read_html_file("gene_seq.html").render(seq=seq,gene=gene)
+                    content_type = 'text/html'
+                    error_code = 200
             except KeyError:
                 contents = Path('html/error.html').read_text()
                 content_type = 'text/html'
