@@ -1,4 +1,5 @@
 import http.client
+import termcolor
 import json
 
 
@@ -20,7 +21,7 @@ for i in range(len(ENDPOINTS)):
         print("ERROR! Cannot connect to the Server")
         exit()
 
-# -- Read the response message from the server
+
     r1 = conn.getresponse()
 
 # -- Print the status line
@@ -28,11 +29,18 @@ for i in range(len(ENDPOINTS)):
 
 # -- Read the response's body
     data = r1.read().decode("utf-8")
+    data_dict = json.loads(data)
 
 
 
-    print("CONTENT: ")
+    print(f"Test{[i+1]}: ")
 
-# Print the information in the object
-    print(data)
+    for key ,value in data_dict.items():
+        termcolor.cprint(f"{key}:", 'purple')
+        if type(value) is list :
+            for x in range(len(value)):
+              print(f"-{value[x]}")
+        else:
+            print(value)
+
 

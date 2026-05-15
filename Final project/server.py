@@ -249,10 +249,12 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 seq = data["seq"]
                 seq = Seq(seq)
                 d = {"Gene": gene}
-                info = seq.count()
-                info_s = info.splitlines()
+
                 for i in range(4):
-                     info_ss = info_s[i].split(":")
+
+                    info = seq.count()
+                    info_s = info.splitlines()
+                    info_ss = info_s[i].split(":")
                     d[info_ss[0]]=[info_ss[1]]
                 if json_marker == "1":
 
