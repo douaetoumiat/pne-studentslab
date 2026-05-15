@@ -30,10 +30,10 @@ for i in range(len(ENDPOINTS)):
 # -- Read the response's body
     data = r1.read().decode("utf-8")
     data_dict = json.loads(data)
+    test_num = i + 1
 
 
-
-    print(f"Test{[i+1]}: ")
+    print(f"Test {test_num} : ")
 
     for key ,value in data_dict.items():
         termcolor.cprint(f"{key}:", 'purple')
