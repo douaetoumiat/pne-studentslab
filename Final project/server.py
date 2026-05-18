@@ -6,7 +6,7 @@ import json
 import jinja2 as j
 from Seq1 import *
 from urllib.parse import parse_qs, urlparse
-from urllib.parse import unquote_plus
+
 
 # Define the Server's port
 PORT = 8080
