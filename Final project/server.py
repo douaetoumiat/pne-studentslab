@@ -6,6 +6,7 @@ import json
 import jinja2 as j
 from Seq1 import *
 from urllib.parse import parse_qs, urlparse
+from urllib.parse import unquote_plus
 
 # Define the Server's port
 PORT = 8080
@@ -68,7 +69,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 data = json.loads(response.read().decode())
                 species = data["species"]
                 if " " in species :
-                    species.replace(" " or "_" or "+","%20")
+                    species.replace("%20")
                 vertebrates = [s for s in species if s['division'] == 'EnsemblVertebrates']
                 number_species =  len(species)
                 limit_selected = int(arguments["limit"][0])
@@ -98,7 +99,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             try:
                 species = arguments['species'][0]
                 if " " or "+" in species:
-                    species = species.replace(" ", "_").replace("+", "_")
+                    species = species.replace(" ", "%20").replace("+", "%20")
                     print(species)
 
                 ENDPOINT =f"/info/assembly/{species}?"
@@ -121,7 +122,8 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                     error_code = 200
                     content_type = 'application/json'
                 else:
-                    contents = read_html_file("karyotype.html").render(species=species,text_html=text_html)
+                    species_html = str(species.replace("%20"," "))
+                    contents = read_html_file("karyotype.html").render(species=species_html,text_html=text_html)
                     content_type = 'text/html'
                     error_code = 200
             except KeyError:
