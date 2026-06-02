@@ -16,7 +16,7 @@ def process_client(s):
     print("Message FROM CLIENT: ")
 
     # -- Split the request messages into lines
-    lines = req.split('\n')
+    lines = req.splitlines()
 
     # -- The request line is the first
     req_line = lines[0]
